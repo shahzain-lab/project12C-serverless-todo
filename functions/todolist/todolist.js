@@ -10,6 +10,7 @@ const typeDefs = gql`
   type Mutation{
     addTodo(text: String!): Todo
     delTodo(id: ID!): Todo
+    checkedTodo(id: ID!): Todo
   }
 
   type Todo{
@@ -76,6 +77,20 @@ const resolvers = {
           q.Delete(q.Ref(q.Collection('todos'), id))
         );
         return results.data;
+      }catch(err){
+        return err.toString()
+      }
+    },
+    checkedTodo: async(_, {id}) => {
+      try{
+        const results = await client.query(
+          q.Update(q.Ref(q.Collection('todos'), id),
+           {
+             data: {completed: true}
+           }
+          )
+        )
+        return results.data
       }catch(err){
         return err.toString()
       }

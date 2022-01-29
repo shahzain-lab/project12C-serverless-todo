@@ -34,11 +34,20 @@ const DELETE_TODO = gql`
  }
 `;
 
+const CHECKED_TODO = gql`
+  mutation checkedTodo($id: ID!){
+    checkedTodo(id: $id){
+      text
+    }
+  }
+`;
+
 export default function Home() {
   const [text, setText] = useState('');
-  const { loading, error, data } = useQuery(GET_TODOS);
+  const { loading, error, data } = useQuery(GET_TODOS, { notifyOnNetworkStatusChange: true });
   const [addTodo] = useMutation(ADD_TODO)
   const [delTodo] = useMutation(DELETE_TODO)
+  const [checkedTodo] = useMutation(CHECKED_TODO)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -57,9 +66,14 @@ export default function Home() {
       variables: { id: id },
       refetchQueries: [{ query: GET_TODOS }]
     })
-    console.log(data)
   }
 
+  const handleChecked = (id) => {
+    checkedTodo({
+      variables: { id: id },
+      refetchQueries: [{ query: GET_TODOS }]
+    })
+  }
 
   return (
     <Box sx={{
@@ -85,7 +99,7 @@ export default function Home() {
         my={5}
         noValidate
       >
-        <TextField id="outlined-basic" value={text} onChange={(e) => setText(e.target.value)} required sx={{ width: '100%', marginY: '10px' }} label="Outlined" variant="outlined" />
+        <TextField id="outlined-basic" value={text} onChange={(e) => setText(e.target.value)} required sx={{ width: '100%', marginY: '10px' }} label="Enter Text" variant="outlined" />
         <Button size="large" type="submit" sx={{ backgroundColor: "#8843F2" }} variant="contained">Submit</Button>
       </Box>
       <div className="box">
@@ -103,7 +117,7 @@ export default function Home() {
             {todo.completed ? (
               <Checkbox disabled defaultChecked />
             ) : (
-              <Checkbox />
+              <Checkbox onClick={() => handleChecked(todo.id)} />
             )}
             <Box sx={{
               background: 'white',
