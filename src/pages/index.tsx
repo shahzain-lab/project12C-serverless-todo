@@ -5,7 +5,6 @@ import { Box, Button, Checkbox, Typography } from "@mui/material";
 import '../assets/global.css'
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
 // This query is executed at run time by Apollo.
 const GET_TODOS = gql`
@@ -131,9 +130,7 @@ export default function Home() {
               marginY={2}
             >
               <Typography variant="body1">{todo.text}</Typography>
-              <Button>
-                <EditIcon color="secondary" />
-              </Button>
+
               <Button
                 onClick={() => handleDelete(todo.id)}
               >

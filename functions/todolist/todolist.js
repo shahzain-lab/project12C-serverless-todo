@@ -21,14 +21,9 @@ const typeDefs = gql`
 
 `
 
-// const todos=[
-//   {id: 0, text: 'todos 1', completed: false},
-//   {id: 2, text: 'todos 2', completed: false},
-//   {id: 3, text: 'todos 3', completed: false},
-// ]
 
 const client = new faunadb.Client({
-  secret: 'fnAEeASuk_ACSzrCH5_r3B1SQ3h1BugGjUwDyzRM'
+  secret: process.env.FAUNADB_ADMIN_SECRET
 })
 
 const resolvers = {
